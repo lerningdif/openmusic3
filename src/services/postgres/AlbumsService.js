@@ -43,7 +43,8 @@ return result.rows.map(mapAlbumToDBModel);
             SELECT 
                 albums.id, 
                 albums.name, 
-                albums.year
+                albums.year,
+                albums."coverUrl"
             FROM albums 
             WHERE albums.id = $1
         `,
@@ -79,6 +80,20 @@ return result.rows.map(mapAlbumToDBModel);
 
     if (!result.rowCount) {
       throw new NotFoundError('Gagal memperbarui album. Id tidak ditemukan');
+    }
+  }
+
+  async editAlbumCoverById(id, { name, coverUrl }) {
+    const updatedAt = new Date().toISOString();
+    const query = {
+      text: 'UPDATE albums SET name = $1, coverUrl = $2 WHERE id = $3',
+      values: [name, coverUrl, id],
+    };
+    const result = await this._pool.query(query);
+
+
+    if (!result.rowCount) {
+      throw new NotFoundError('Gagal memperbarui cover. Id tidak ditemukan');
     }
   }
   

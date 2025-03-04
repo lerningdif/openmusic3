@@ -1,8 +1,9 @@
 const ClientError = require('../../exceptions/ClientError');
  
 class UploadsHandler {
-  constructor(service, validator) {
-    this._service = service;
+  constructor(storageService, albumsService, validator) {
+    this._storageService = storageService;
+    this._albumsService = albumsService
     this._validator = validator;
  
     this.postUploadImageHandler = this.postUploadImageHandler.bind(this);
@@ -14,7 +15,7 @@ class UploadsHandler {
     this._validator.validateImageHeaders(cover.hapi.headers);
  
     const filename = await this._service.writeFile(cover, cover.hapi);
-    const url = `http://${process.env.HOST}:${process.env.PORT}/upload/covers/${filename}`;
+    const url = `http://${process.env.HOST}:${process.env.PORT}/uploads/images/${filename}`;
     await this._albumsService.editAlbumCoverById(albumId, url);
  
     const response = h.response({

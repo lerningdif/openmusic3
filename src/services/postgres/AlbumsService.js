@@ -83,11 +83,11 @@ return result.rows.map(mapAlbumToDBModel);
     }
   }
 
-  async editAlbumCoverById(id, { name, coverUrl }) {
+  async editAlbumCoverById(id, coverUrl) { 
     const updatedAt = new Date().toISOString();
     const query = {
-      text: 'UPDATE albums SET name = $1, coverUrl = $2 WHERE id = $3',
-      values: [name, coverUrl, id],
+      text: 'UPDATE albums SET "coverUrl" = $1 WHERE id = $2',
+      values: [coverUrl, id],
     };
     const result = await this._pool.query(query);
 
